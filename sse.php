@@ -25,8 +25,16 @@ while (1) {
 
     $counter++;
 
-    ob_end_flush();
+    // flush the output buffer and send echoed messages to the browser
+    while (ob_get_level() > 0) {
+        ob_end_flush();
+    }
     flush();
+
+    // break the loop if the client aborted the connection (closed the page)
+    if (connection_aborted()) {
+        break;
+    }
 
     sleep(2);
 }
